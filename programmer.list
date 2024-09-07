@@ -1,6 +1,6 @@
 # 内容：程序员专用
-# 更新：2023-03-06 15:26:33
-# 数量：330条
+# 更新：2024-09-07 16:02:33
+
 
 # github
 DOMAIN-SUFFIX,github.com
@@ -8,8 +8,6 @@ DOMAIN-SUFFIX,github.io
 DOMAIN-SUFFIX,githubapp.com
 DOMAIN-SUFFIX,githubassets.com
 DOMAIN-SUFFIX,githubusercontent.com
-DOMAIN-SUFFIX,bulianglin.com
 
-#doprax sub自建管理
-DOMAIN-SUFFIX,eu-faiqipbsgmq.doprax.com
-DOMAIN-SUFFIX,eu-hzftuknssuo.doprax.com
+# 不良林
+DOMAIN-SUFFIX,bulianglin.com
