@@ -1,0 +1,6 @@
+# Cursor IDE 直连规则
+# Cursor 编辑器相关域名应该走直连，避免被代理规则覆盖
+
+DOMAIN-SUFFIX,cursor.com
+DOMAIN-SUFFIX,cursor.sh
+
