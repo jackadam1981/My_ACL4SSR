@@ -1,0 +1,16 @@
+{
+  "version": 4,
+  "rules": [
+    {
+      "domain": [
+        "api.github.com",
+        "copilot-proxy.githubusercontent.com",
+        "api.githubcopilot.com",
+        "api.individual.githubcopilot.com"
+      ],
+      "domain_keyword": [
+        "cocopilot"
+      ]
+    }
+  ]
+}
