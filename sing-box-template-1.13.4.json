@@ -1,0 +1,317 @@
+{
+  "log": {
+    "level": "info",
+    "timestamp": true
+  },
+  "experimental": {
+    "cache_file": {
+      "enabled": true,
+      "path": "cache.db",
+      "store_rdrc": true
+    },
+    "clash_api": {
+      "external_controller": "127.0.0.1:9090",
+      "default_mode": "Rule"
+    }
+  },
+  "dns": {
+    "servers": [
+      {
+        "type": "local",
+        "tag": "dns_local",
+        "prefer_go": true
+      },
+      {
+        "type": "https",
+        "tag": "dns_remote",
+        "server": "1.1.1.1",
+        "server_port": 443,
+        "path": "/dns-query",
+        "detour": "proxy",
+        "tls": {
+          "enabled": true,
+          "server_name": "cloudflare-dns.com"
+        }
+      }
+    ],
+    "rules": [
+      {
+        "rule_set": [
+          "local-area-network",
+          "google-cn",
+          "steam-cn",
+          "unban",
+          "cursor-direct",
+          "geoip-cn",
+          "geosite-cn"
+        ],
+        "action": "route",
+        "server": "dns_local"
+      },
+      {
+        "rule_set": [
+          "programmer",
+          "copilot",
+          "github-copilot",
+          "ai-foreign",
+          "adult",
+          "porn-foreign",
+          "geosite-geolocation-not-cn"
+        ],
+        "action": "route",
+        "server": "dns_remote"
+      }
+    ],
+    "final": "dns_local",
+    "strategy": "prefer_ipv4",
+    "independent_cache": true,
+    "cache_capacity": 8192
+  },
+  "inbounds": [
+    {
+      "type": "mixed",
+      "tag": "mixed-in",
+      "listen": "127.0.0.1",
+      "listen_port": 7890,
+      "set_system_proxy": false
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "direct",
+      "tag": "direct"
+    },
+    {
+      "type": "block",
+      "tag": "block"
+    },
+    {
+      "type": "socks",
+      "tag": "node-1",
+      "server": "127.0.0.1",
+      "server_port": 1081
+    },
+    {
+      "type": "socks",
+      "tag": "node-2",
+      "server": "127.0.0.1",
+      "server_port": 1082
+    },
+    {
+      "type": "urltest",
+      "tag": "proxy-auto",
+      "outbounds": [
+        "node-1",
+        "node-2"
+      ],
+      "url": "https://www.gstatic.com/generate_204",
+      "interval": "5m",
+      "tolerance": 50
+    },
+    {
+      "type": "selector",
+      "tag": "proxy",
+      "outbounds": [
+        "proxy-auto",
+        "node-1",
+        "node-2",
+        "direct"
+      ],
+      "default": "proxy-auto"
+    },
+    {
+      "type": "selector",
+      "tag": "ai",
+      "outbounds": [
+        "proxy",
+        "proxy-auto",
+        "node-1",
+        "node-2",
+        "direct"
+      ],
+      "default": "proxy"
+    },
+    {
+      "type": "selector",
+      "tag": "dev",
+      "outbounds": [
+        "proxy",
+        "proxy-auto",
+        "node-1",
+        "node-2",
+        "direct"
+      ],
+      "default": "proxy"
+    },
+    {
+      "type": "selector",
+      "tag": "adult-proxy",
+      "outbounds": [
+        "proxy",
+        "proxy-auto",
+        "node-1",
+        "node-2"
+      ],
+      "default": "proxy"
+    },
+    {
+      "type": "selector",
+      "tag": "final",
+      "outbounds": [
+        "direct",
+        "proxy",
+        "proxy-auto",
+        "node-1",
+        "node-2"
+      ],
+      "default": "direct"
+    }
+  ],
+  "route": {
+    "auto_detect_interface": true,
+    "default_domain_resolver": "dns_local",
+    "final": "final",
+    "rule_set": [
+      {
+        "type": "remote",
+        "tag": "geosite-cn",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/cn.srs",
+        "download_detour": "proxy",
+        "update_interval": "1d"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-geolocation-not-cn",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/geolocation-!cn.srs",
+        "download_detour": "proxy",
+        "update_interval": "1d"
+      },
+      {
+        "type": "remote",
+        "tag": "ai-foreign",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ai-chat-!cn.srs",
+        "download_detour": "proxy",
+        "update_interval": "1d"
+      },
+      {
+        "type": "remote",
+        "tag": "porn-foreign",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-porn.srs",
+        "download_detour": "proxy",
+        "update_interval": "1d"
+      },
+      {
+        "type": "remote",
+        "tag": "geoip-cn",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/cn.srs",
+        "download_detour": "proxy",
+        "update_interval": "1d"
+      },
+      {
+        "type": "local",
+        "tag": "adult",
+        "format": "source",
+        "path": "sing-rule-set/adult.json"
+      },
+      {
+        "type": "local",
+        "tag": "copilot",
+        "format": "source",
+        "path": "sing-rule-set/Copilot.json"
+      },
+      {
+        "type": "local",
+        "tag": "github-copilot",
+        "format": "source",
+        "path": "sing-rule-set/GithubCopilot.json"
+      },
+      {
+        "type": "local",
+        "tag": "cursor-direct",
+        "format": "source",
+        "path": "sing-rule-set/cursor_direct.json"
+      },
+      {
+        "type": "local",
+        "tag": "google-cn",
+        "format": "source",
+        "path": "sing-rule-set/GoogleCN.json"
+      },
+      {
+        "type": "local",
+        "tag": "local-area-network",
+        "format": "source",
+        "path": "sing-rule-set/LocalAreaNetwork.json"
+      },
+      {
+        "type": "local",
+        "tag": "programmer",
+        "format": "source",
+        "path": "sing-rule-set/programmer.json"
+      },
+      {
+        "type": "local",
+        "tag": "steam-cn",
+        "format": "source",
+        "path": "sing-rule-set/SteamCN.json"
+      },
+      {
+        "type": "local",
+        "tag": "unban",
+        "format": "source",
+        "path": "sing-rule-set/UnBan.json"
+      }
+    ],
+    "rules": [
+      {
+        "rule_set": [
+          "local-area-network",
+          "cursor-direct",
+          "google-cn",
+          "steam-cn",
+          "unban",
+          "geoip-cn",
+          "geosite-cn"
+        ],
+        "action": "route",
+        "outbound": "direct"
+      },
+      {
+        "rule_set": [
+          "programmer",
+          "copilot",
+          "github-copilot"
+        ],
+        "action": "route",
+        "outbound": "dev"
+      },
+      {
+        "rule_set": [
+          "ai-foreign"
+        ],
+        "action": "route",
+        "outbound": "ai"
+      },
+      {
+        "rule_set": [
+          "adult",
+          "porn-foreign"
+        ],
+        "action": "route",
+        "outbound": "adult-proxy"
+      },
+      {
+        "rule_set": [
+          "geosite-geolocation-not-cn"
+        ],
+        "action": "route",
+        "outbound": "proxy"
+      }
+    ]
+  }
+}
