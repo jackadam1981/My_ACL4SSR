@@ -37,6 +37,12 @@
 powershell -NoProfile -File .\scripts\build-subscription-link.ps1 -SubscriptionUrl "https://你的机场订阅"
 ```
 
+奈飞模板规则：
+
+```powershell
+powershell -NoProfile -File .\scripts\build-subscription-link.ps1 -SubscriptionUrl "https://你的机场订阅" -ConfigIni "https://raw.githubusercontent.com/jackadam1981/My_ACL4SSR/main/my_rules_netflix.ini"
+```
+
 脚本会打印一条可粘贴的示例链接（默认转换域名为 `api.dler.io`，可按需改脚本内变量）。
 
 ## OpenClash
@@ -49,7 +55,12 @@ powershell -NoProfile -File .\scripts\build-subscription-link.ps1 -SubscriptionU
 
 | 文件 | 作用 |
 |------|------|
-| `my_rules.ini` | ACL4SSR 规则与分组；末尾 `clash_rule_base` 指向底稿 |
+| `my_rules.ini` | 主规则；`clash_rule_base` → `GeneralClashConfig.yml` |
+| `my_rules_netflix.ini` | 与上游 `ACL4SSR_Online_Full_Netflix.ini` 等价，**已启用** `clash_rule_base` 指向本仓库底稿（勿改子模块 `ACL4SSR/...` 里被注释的那行） |
 | `GeneralClashConfig.yml` | Meta 通用底稿（含 `proxies: []` 占位） |
 | `GeneralClashConfig.tun-openclash.yml` | OpenClash 覆写（TUN / DNS 监听） |
 | `GeneralClashConfig.android-overlay.yml` | Android 可选覆写 |
+
+订阅转换里把 `config=` 换成 Netflix 版 raw 即可，例如：
+
+`https://raw.githubusercontent.com/jackadam1981/My_ACL4SSR/main/my_rules_netflix.ini`

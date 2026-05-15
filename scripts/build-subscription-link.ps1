@@ -1,6 +1,9 @@
 <#
 .SYNOPSIS
-  Print a subconverter-style Clash subscription URL (my_rules.ini + airport sub).
+  Print a subconverter-style Clash subscription URL (rules ini + airport sub).
+
+.PARAMETER ConfigIni
+  Raw URL to my_rules.ini or my_rules_netflix.ini (default: my_rules.ini).
 
 .PARAMETER SubscriptionUrl
   Your airport / node subscription URL (plain text, not Base64).
@@ -12,11 +15,13 @@ param(
   [Parameter(Mandatory = $true)]
   [string]$SubscriptionUrl,
 
-  [string]$ConverterBase = "https://api.dler.io"
+  [string]$ConverterBase = "https://api.dler.io",
+
+  [string]$ConfigIni = "https://raw.githubusercontent.com/jackadam1981/My_ACL4SSR/main/my_rules.ini"
 )
 
 $ErrorActionPreference = "Stop"
-$configIni = "https://raw.githubusercontent.com/jackadam1981/My_ACL4SSR/main/my_rules.ini"
+$configIni = $ConfigIni
 $b64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($SubscriptionUrl))
 $urlParam = [uri]::EscapeDataString($b64)
 $configParam = [uri]::EscapeDataString($configIni)
