@@ -1,7 +1,7 @@
 ﻿# My_ACL4SSR — clash_rule_base（收缩版）
 #
 # 与 ACL4SSR/Clash/GeneralClashConfig.yml 中「已启用」项对齐：端口、LAN、日志、API、experimental、CFW 延迟与连接策略。
-# 已加回：mode: rule。仍不含：官方注释掉的 dns；不含官方超长 cfw-bypass。
+# 已加回：mode: rule；unified-delay / tcp-concurrent / keep-alive-interval / profile。仍不含官方 dns；不含超长 cfw-bypass。
 # 订阅合并仍需要文末 proxies: []；OpenClash 全局 TUN/DNS 覆写见 GeneralClashConfig.tun-openclash.yml。
 #
 # 逐项加回 Meta/自研项时请配合 my_rules_test.ini 更新订阅做 A/B（建议顺序见文末注释）。
@@ -14,6 +14,13 @@ ipv6: true
 mode: rule
 log-level: info
 external-controller: 127.0.0.1:9090
+
+unified-delay: true
+tcp-concurrent: true
+keep-alive-interval: 30
+profile:
+  store-selected: true
+  store-fake-ip: true
 
 experimental:
   ignore-resolve-fail: true
@@ -28,7 +35,7 @@ cfw-proxies-order: default
 
 # --- 建议逐项加回测试顺序（从上一版完整底稿复制即可）---
 # 1) mode: rule（已加回）
-# 2) unified-delay、tcp-concurrent、keep-alive-interval、profile
+# 2) unified-delay、tcp-concurrent、keep-alive-interval、profile（已加回）
 # 3) geodata-mode、geo-auto-update、geo-update-interval、geox-url
 # 4) sniffer
 # 5) dns（含 fake-ip、nameserver-policy 等）
