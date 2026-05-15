@@ -15,8 +15,7 @@ mode: rule
 log-level: info
 external-controller: 127.0.0.1:9090
 
-# Android 上避免按进程匹配（易异常）；OpenClash 可忽略
-find-process-mode: "off"
+# find-process-mode 不写：各内核默认不同；OpenClash 部分版本仅认 strict/always，写 off 会报 invalid find process mode
 
 unified-delay: true
 tcp-concurrent: true
