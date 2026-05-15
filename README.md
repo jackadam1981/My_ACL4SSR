@@ -56,7 +56,7 @@ powershell -NoProfile -File .\scripts\build-subscription-link.ps1 -SubscriptionU
 | 文件 | 作用 |
 |------|------|
 | `my_rules.ini` | 主规则；`clash_rule_base` → `GeneralClashConfig.yml` |
-| `my_rules_netflix.ini` | 与上游 `ACL4SSR_Online_Full_Netflix.ini` 等价，**已启用** `clash_rule_base` 指向本仓库底稿（勿改子模块 `ACL4SSR/...` 里被注释的那行） |
+| `my_rules_netflix.ini` | 与 `ACL4SSR/Clash/config/ACL4SSR_Online_Full_Netflix.ini` 相同，**仅** `clash_rule_base` 改为你仓库的 `GeneralClashConfig.yml`（相对上游：去掉行首 `;` 并换 URL） |
 | `GeneralClashConfig.yml` | Meta 通用底稿（含 `proxies: []` 占位） |
 | `GeneralClashConfig.tun-openclash.yml` | OpenClash 覆写（TUN / DNS 监听） |
 | `GeneralClashConfig.android-overlay.yml` | Android 可选覆写 |
