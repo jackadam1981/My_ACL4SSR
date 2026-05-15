@@ -1,0 +1,6 @@
+[submodule "ACL4SSR"]
+	path = ACL4SSR
+	url = https://github.com/ACL4SSR/ACL4SSR.git
+[submodule "cmliu-acl4ssr"]
+	path = cmliu-acl4ssr
+	url = https://github.com/cmliu/ACL4SSR.git

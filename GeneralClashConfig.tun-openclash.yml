@@ -1,0 +1,23 @@
+# OpenClash 专用覆写（与 GeneralClashConfig.yml 合并，不要单独给 Android 用）
+# 路径示例（GitHub raw）：
+#   https://raw.githubusercontent.com/jackadam1981/My_ACL4SSR/main/GeneralClashConfig.tun-openclash.yml
+#
+# OpenClash → 配置管理 → 配置文件覆写 / 附加配置 / yaml 合并
+# 内核：Mihomo；运行模式：TUN 或 混合；打开 DNS 重定向
+
+redir-port: 7892
+external-controller: 0.0.0.0:9090
+
+dns:
+  listen: 0.0.0.0:1053
+
+tun:
+  enable: true
+  stack: mixed
+  mtu: 1500
+  auto-route: true
+  auto-detect-interface: true
+  strict-route: false
+  dns-hijack:
+    - any:53
+    - tcp://any:53

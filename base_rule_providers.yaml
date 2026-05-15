@@ -1,3 +1,5 @@
+# 已合并进 GeneralClashConfig.yml；my_rules.ini 的 clash_rule_base 请指向该文件。
+# 保留本文件仅为兼容旧链接。
 dns:
   # DNS 防泄漏最小模板：
   # 1. 所有客户端 DNS 请求先进 Clash 内建 DNS（listen）

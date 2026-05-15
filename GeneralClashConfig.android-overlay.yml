@@ -1,0 +1,13 @@
+# Android 可选覆写（仅当与订阅内 tun/DNS 冲突时在 App「覆写配置」里粘贴）
+# 一般不需要：Clash Meta for Android 打开 VPN 后会自行注入 TUN
+#
+# 若全局 VPN 异常，可尝试把 stack 改为 gvisor：
+
+tun:
+  enable: true
+  stack: gvisor
+  auto-route: true
+  auto-detect-interface: true
+  strict-route: false
+  dns-hijack:
+    - any:53

@@ -1,0 +1,91 @@
+﻿# My_ACL4SSR — clash_rule_base（通用：Android Meta / FlClash / 桌面 Meta / OpenClash 订阅底稿）
+# my_rules.ini → clash_rule_base 指向本文件
+#
+# 平台用法：
+#   Android（Clash Meta for Android / FlClash）：直接导入订阅 → App 内打开「VPN」由客户端挂 TUN
+#   OpenClash 路由器全局透明：另在插件「配置覆写/自定义」合并 GeneralClashConfig.tun-openclash.yml
+#   Windows CFW：可用；系统代理绕过请用规则，不要用 cfw-bypass
+
+mixed-port: 7890
+socks-port: 7891
+allow-lan: true
+bind-address: "*"
+ipv6: true
+mode: rule
+log-level: info
+external-controller: 127.0.0.1:9090
+
+# Android 上避免按进程匹配（易异常）；OpenClash 可忽略
+find-process-mode: "off"
+
+unified-delay: true
+tcp-concurrent: true
+keep-alive-interval: 30
+profile:
+  store-selected: true
+  store-fake-ip: true
+
+experimental:
+  ignore-resolve-fail: true
+
+geodata-mode: true
+geo-auto-update: true
+geo-update-interval: 24
+geox-url:
+  geoip: https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.dat
+  geosite: https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat
+  mmdb: https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/country.mmdb
+
+sniffer:
+  enable: true
+  force-dns-mapping: true
+  parse-pure-ip: true
+  override-destination: false
+  sniff:
+    HTTP:
+      ports: [80, 8080-8880]
+    TLS:
+      ports: [443, 8443]
+    QUIC:
+      ports: [443, 8443]
+  skip-domain:
+    - "Mijia Cloud"
+    - "+.push.apple.com"
+
+dns:
+  enable: true
+  listen: :1053
+  ipv6: true
+  enhanced-mode: fake-ip
+  respect-rules: true
+  default-nameserver:
+    - 1.1.1.1
+    - 223.5.5.5
+  fake-ip-filter:
+    - "*.lan"
+    - "*.local"
+    - "*.localhost"
+    - localhost.ptlogin2.qq.com
+  nameserver-policy:
+    "geosite:private,cn":
+      - 119.29.29.29
+      - 223.5.5.5
+  nameserver:
+    - 119.29.29.29
+    - 223.5.5.5
+  fallback:
+    - tls://1.1.1.1:853
+    - tls://8.8.4.4:853
+    - https://dns.google/dns-query
+  proxy-server-nameserver:
+    - tls://1.1.1.1:853
+    - tls://8.8.4.4:853
+  fallback-filter:
+    geoip: true
+    geoip-code: CN
+    ipcidr:
+      - 240.0.0.0/4
+    domain:
+      - "+.google.com"
+      - "+.facebook.com"
+      - "+.youtube.com"
