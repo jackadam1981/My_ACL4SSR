@@ -5,6 +5,11 @@
 #   Android（Clash Meta for Android / FlClash）：直接导入订阅 → App 内打开「VPN」由客户端挂 TUN
 #   OpenClash 路由器全局透明：另在插件「配置覆写/自定义」合并 GeneralClashConfig.tun-openclash.yml
 #   Windows CFW：可用；系统代理绕过请用规则，不要用 cfw-bypass
+#
+# 故意不写 proxies / proxy-groups / rules：
+#   - 节点（proxies）来自你的机场/自建「订阅链接」，由 ACL4SSR / subconverter 在转换时写入。
+#   - 策略组与分流规则由 my_rules.ini（custom_proxy_group、ruleset）生成，再与 clash_rule_base 合并成完整 config。
+# 若运行中的 config 里没有 proxies，说明订阅未合并或转换失败，不是本底稿缺字段。
 
 mixed-port: 7890
 socks-port: 7891
