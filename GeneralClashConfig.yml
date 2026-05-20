@@ -1,8 +1,9 @@
-﻿# My_ACL4SSR — clash_rule_base（收缩版）
+# My_ACL4SSR - clash_rule_base（通用底稿）
 #
-# 与 ACL4SSR/Clash/GeneralClashConfig.yml 中「已启用」项对齐：端口、LAN、日志、API、experimental、CFW 延迟与连接策略。
-# 已加回：mode: rule；unified-delay / tcp-concurrent / keep-alive-interval / profile。仍不含官方 dns；不含超长 cfw-bypass。
-# 订阅合并仍需要文末 proxies: []；OpenClash 全局 TUN/DNS 覆写见 GeneralClashConfig.tun-openclash.yml。
+# 职责边界：
+# - 本文件只提供 Clash/Mihomo 的基础运行字段和 proxies: [] 占位。
+# - 分流规则、策略组、Cloudflare colo 国家/地区测速组都在 my_rules.ini / my_rules_test.ini 生成。
+# - OpenClash 的 TUN/DNS 透明代理配置用 GeneralClashConfig.tun-openclash.yml 覆写，不塞进通用底稿。
 #
 # 逐项加回 Meta/自研项时请配合 my_rules_test.ini 更新订阅做 A/B（建议顺序见文末注释）。
 
@@ -24,6 +25,39 @@ profile:
 
 experimental:
   ignore-resolve-fail: true
+
+# DNS 防泄漏最小模板：
+# 1. 所有客户端 DNS 请求先进 Clash 内建 DNS（listen）
+# 2. 根据规则（respect-rules）决定走直连还是代理
+# 3. nameserver 用于解析国内/常规域名
+# 4. fallback 使用加密公共 DNS，主要解析需要代理的国外域名
+# 5. proxy-server-nameserver 供代理节点自己解析域名，防止节点直连外泄
+dns:
+  enable: true
+  listen: 0.0.0.0:1053
+  ipv6: true
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  respect-rules: true
+  default-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+    - 1.1.1.1
+  nameserver:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+  fallback:
+    - https://cloudflare-dns.com/dns-query
+    - https://dns.google/dns-query
+  fallback-filter:
+    geoip: false
+  proxy-server-nameserver:
+    - https://dns.alidns.com/dns-query
+    - https://cloudflare-dns.com/dns-query
+  fake-ip-filter:
+    - "*.lan"
+    - "*.local"
+    - localhost.ptlogin2.qq.com
 
 cfw-latency-timeout: 3000
 cfw-latency-url: http://www.gstatic.com/generate_204

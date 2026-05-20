@@ -27,6 +27,10 @@
 
 4. 更新订阅后，在生成的配置里应能看到 **`proxies` 有节点**。
 
+## Cloudflare colo 分组
+
+`my_rules.ini` 会按节点名里的 Cloudflare colo 短码生成自动测速组，例如 `-HKG-`、`-SIN-`、`-LAX-`。FlareFlux 订阅只需要输出带短码的节点名，订阅转换会自动生成香港、台湾、新加坡、日本、韩国、美国、欧洲、其他地区等分组。
+
 若你用的 API 参数名不是 `config`，按该站文档改成 `remote_config` 等对应字段。
 
 ## 做法二：仓库内脚本生成链接
