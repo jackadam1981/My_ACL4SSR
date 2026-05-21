@@ -1,70 +1,38 @@
 # My_ACL4SSR
 
-规则与底稿：`my_rules.ini` + `GeneralClashConfig.yml`（`clash_rule_base`）。**节点不写在底稿里**，必须用「订阅合并」把机场链接和规则一起转换。
+FlareFlux 使用的订阅转换规则仓。仓库保持精简，只保存我们维护的 ini、Clash 底稿和少量自建补丁规则；公共规则集一律通过线上 raw 地址自动更新。
 
-## 为什么会出现「没有 proxies」
+## 入口
 
-只导入 `GeneralClashConfig.yml` 的 raw 链接时，**没有任何机场订阅参与合并**，`proxies` 只能是空数组。解决方式：**始终用带 `url=`（节点订阅）的转换链接**，或 OpenClash 里同时配置「规则订阅 + 节点订阅」再合并。
+- `my_rules.ini`：正式规则，生产订阅使用。
+- `my_rules_test.ini`：测试规则，验证通过后再同步到正式规则。
+- `GeneralClashConfig.yml`：Clash Meta 通用底稿，由 ini 中的 `clash_rule_base` 引用。
+- `lists-used/cursor_direct.list`：自建 Cursor 直连补丁。
+- `lists-used/adult.list`：自建成人内容补充规则。
 
-## 做法一：在线订阅转换（推荐）
+## 订阅转换
 
-1. 把你的**机场订阅链接**做 **Base64**（UTF-8）。PowerShell 示例：
+使用支持 subconverter 外部配置的后端，把节点订阅和本仓 ini 组合成 Clash 配置：
 
-   ```powershell
-   [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes("https://你的机场订阅地址"))
-   ```
-
-2. 使用支持你站点的 **subconverter 类 API**（示例域名请换成你实际在用的）：
-
-   ```text
-   https://<你的转换服务>/sub?target=clash&new_name=true&url=<上一步Base64>&config=https://raw.githubusercontent.com/jackadam1981/My_ACL4SSR/main/my_rules.ini
-   ```
-
-   - `url=`：机场订阅（Base64）  
-   - `config=`：本仓库 **`my_rules.ini`**（内含 `clash_rule_base` 指向 `GeneralClashConfig.yml`）  
-
-3. 把整条转换后的 **https 链接**填进 Clash / OpenClash / Meta Android 的「订阅地址」。
-
-4. 更新订阅后，在生成的配置里应能看到 **`proxies` 有节点**。
-
-## Cloudflare colo 分组
-
-`my_rules.ini` 会按节点名里的 Cloudflare colo 短码生成自动测速组，例如 `-HKG-`、`-SIN-`、`-LAX-`。FlareFlux 订阅只需要输出带短码的节点名，订阅转换会自动生成香港、台湾、新加坡、日本、韩国、美国、欧洲、其他地区等分组。
-
-若你用的 API 参数名不是 `config`，按该站文档改成 `remote_config` 等对应字段。
-
-## 做法二：仓库内脚本生成链接
-
-在仓库根目录执行（把机场地址换成你的）：
-
-```powershell
-powershell -NoProfile -File .\scripts\build-subscription-link.ps1 -SubscriptionUrl "https://你的机场订阅"
+```text
+https://<转换后端>/sub?target=clash&url=<节点订阅>&config=https://raw.githubusercontent.com/jackadam1981/My_ACL4SSR/main/my_rules.ini
 ```
 
-奈飞模板规则：
+测试规则使用：
 
-```powershell
-powershell -NoProfile -File .\scripts\build-subscription-link.ps1 -SubscriptionUrl "https://你的机场订阅" -ConfigIni "https://raw.githubusercontent.com/jackadam1981/My_ACL4SSR/main/my_rules_netflix.ini"
+```text
+https://<转换后端>/sub?target=clash&url=<节点订阅>&config=https://raw.githubusercontent.com/jackadam1981/My_ACL4SSR/main/my_rules_test.ini
 ```
 
-脚本会打印一条可粘贴的示例链接（默认转换域名为 `api.dler.io`，可按需改脚本内变量）。
+`url=` 可以是原始订阅地址或后端要求的 Base64 订阅地址，按转换后端文档为准。
 
-## OpenClash
+## 维护原则
 
-- 不要只把 `GeneralClashConfig.yml` 当唯一订阅。  
-- 使用「**合并订阅**」或「**订阅转换后的完整链接**」（含 `url` + `config`）。  
-- 路由器透明代理另见 `GeneralClashConfig.tun-openclash.yml` 覆写说明。
+- 不提交 ACL4SSR、cmliu/ACL4SSR 等上游规则仓镜像。
+- 不提交公共规则集的本地副本；需要公共规则时在 ini 中引用线上 raw 地址。
+- 自建补丁规则只放在 `lists-used/`，并由 ini 通过本仓 raw 地址引用。
+- `my_rules.ini` 是正式入口，未经验证不要直接改；先改 `my_rules_test.ini` 做转换和真机测试。
 
-## 文件说明
+## FlareFlux 节点命名
 
-| 文件 | 作用 |
-|------|------|
-| `my_rules.ini` | 主规则；`clash_rule_base` → `GeneralClashConfig.yml` |
-| `my_rules_netflix.ini` | 与 `ACL4SSR/Clash/config/ACL4SSR_Online_Full_Netflix.ini` 相同，**仅** `clash_rule_base` 改为你仓库的 `GeneralClashConfig.yml`（相对上游：去掉行首 `;` 并换 URL） |
-| `GeneralClashConfig.yml` | Meta 通用底稿（含 `proxies: []` 占位） |
-| `GeneralClashConfig.tun-openclash.yml` | OpenClash 覆写（TUN / DNS 监听） |
-| `GeneralClashConfig.android-overlay.yml` | Android 可选覆写 |
-
-订阅转换里把 `config=` 换成 Netflix 版 raw 即可，例如：
-
-`https://raw.githubusercontent.com/jackadam1981/My_ACL4SSR/main/my_rules_netflix.ini`
+FlareFlux 订阅节点名应包含 Cloudflare colo 短码，例如 `-HKG-`、`-SIN-`、`-SJC-`。规则会基于这些短码生成香港、台湾、新加坡、日本、韩国、美国、欧洲、其他地区等自动测速组。
