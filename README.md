@@ -9,6 +9,7 @@ FlareFlux 使用的订阅转换规则仓。仓库保持精简，只保存我们�
 - `GeneralClashConfig.yml`：Clash Meta 通用底稿，由 ini 中的 `clash_rule_base` 引用。
 - `lists-used/cursor_direct.list`：自建 Cursor 直连补丁。
 - `lists-used/adult.list`：自建成人内容补充规则。
+- `lists-used/openai_extra.list`：自建 OpenAI / ChatGPT / Codex 补充规则，防止上游规则滞后导致 AI 流量漏到直连或漏网之鱼。
 
 ## 订阅转换
 
@@ -32,6 +33,7 @@ https://<转换后端>/sub?target=clash&url=<节点订阅>&config=https://raw.gi
 - 不提交公共规则集的本地副本；需要公共规则时在 ini 中引用线上 raw 地址。
 - 自建补丁规则只放在 `lists-used/`，并由 ini 通过本仓 raw 地址引用。
 - `my_rules.ini` 是正式入口，未经验证不要直接改；先改 `my_rules_test.ini` 做转换和真机测试。
+- ChatGPT / Codex 优先命中 `💬 被墙AI` 分组；该分组默认可走自动测速，也可手动固定到稳定 XHTTP TLS 节点。
 
 ## FlareFlux 节点命名
 
