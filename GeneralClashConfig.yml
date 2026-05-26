@@ -3,9 +3,9 @@
 # 职责边界：
 # - 本文件只提供 Clash/Mihomo 的基础运行字段和 proxies: [] 占位。
 # - 分流规则、策略组、Cloudflare colo 国家/地区测速组都在 my_rules.ini / my_rules_test.ini 生成。
-# - OpenClash 的 TUN/DNS 透明代理配置用 GeneralClashConfig.tun-openclash.yml 覆写，不塞进通用底稿。
+# - 本文件包含通用 DNS 防泄漏模板；OpenClash 侧仍需启用 DNS 劫持 / 使用 Clash DNS，确保客户端 DNS 进入 Clash。
 #
-# 逐项加回 Meta/自研项时请配合 my_rules_test.ini 更新订阅做 A/B（建议顺序见文末注释）。
+# 逐项调整 Meta/自研项时请配合 my_rules_test.ini 更新订阅做 A/B（建议顺序见文末注释）。
 
 mixed-port: 7890
 socks-port: 7891
@@ -67,7 +67,7 @@ cfw-conn-break-strategy:
   mode: false
 cfw-proxies-order: default
 
-# --- 建议逐项加回测试顺序（从上一版完整底稿复制即可）---
+# --- 建议逐项调整测试顺序 ---
 # 1) mode: rule（已加回）
 # 2) unified-delay、tcp-concurrent、keep-alive-interval、profile（已加回）
 # 3) geodata-mode、geo-auto-update、geo-update-interval、geox-url
