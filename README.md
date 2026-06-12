@@ -34,6 +34,6 @@ https://<转换后端>/sub?target=clash&url=<节点订阅>&config=https://raw.gi
 - `my_rules.ini` 是正式入口，未经验证不要直接改；先改 `my_rules_test.ini` 做转换和真机测试。
 - ChatGPT / Codex 由上游 `Copilot.list`、`AI.list`、`OpenAi.list` 命中 `🤖 AI自动` 分组；该分组使用 `https://chatgpt.com/` 做健康检查，避免通用 `gstatic` 测速选中会返回 403 的节点。
 
-## FlareFlux 节点命名
+## 节点与测速
 
-FlareFlux 订阅节点名应包含 Cloudflare colo 短码，例如 `-HKG-`、`-SIN-`、`-SJC-`。规则会基于这些短码生成香港、台湾、新加坡、日本、韩国、美国、欧洲、其他地区等自动测速组。
+当前主力后端为 **edgetunnel**，订阅节点名不含 Cloudflare colo 短码，因此规则中**不再提供**香港/台湾/新加坡等地区自动测速组。统一使用 `♻️ 自动选择`（gstatic 测速）与 `🚀 手动切换`。
