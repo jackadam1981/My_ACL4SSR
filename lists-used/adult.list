@@ -1,9 +1,10 @@
 # 内容：成人网站补充规则
-# 更新：2025-01-27 16:00:00
+# 更新：2026-06-28
 # 说明：补充官方 Porn.list 没有的规则
 
 # LiveHDCams
 DOMAIN-SUFFIX,livehdcams.com
 
-# Chaturbate CDN
+# Chaturbate CDN / backend (Multi Media LLC)
 DOMAIN-SUFFIX,mmcdn.com
+DOMAIN-SUFFIX,highwebmedia.com
