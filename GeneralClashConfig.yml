@@ -60,7 +60,7 @@ dns:
     - localhost.ptlogin2.qq.com
 
 cfw-latency-timeout: 3000
-cfw-latency-url: http://www.gstatic.com/generate_204
+cfw-latency-url: http://cp.cloudflare.com/generate_204
 cfw-conn-break-strategy:
   proxy: none
   profile: true
