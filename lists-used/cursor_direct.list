@@ -1,6 +1,5 @@
-# Cursor IDE 直连规则
-# Cursor 编辑器相关域名应该走直连，避免被代理规则覆盖
+# Cursor 仅保留站点/下载类域名直连；API（*.cursor.sh）走 💬 被墙AI，否则 Codex/Agent 在国内直连会断。
+# 见 https://cursor.com/docs/enterprise/network-configuration
 
-DOMAIN-SUFFIX,cursor.com
-DOMAIN-SUFFIX,cursor.sh
-
+DOMAIN-SUFFIX,downloads.cursor.com
+DOMAIN-SUFFIX,cursor-cdn.com
